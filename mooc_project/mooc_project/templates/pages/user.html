@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Welcome to your receipt handler system</title>
+    </head>
+    <body>
+		<h1>Welcome to your receipt handler system {{user.username}}!</h1>
+      <form action='logout/' method="POST">
+			{% csrf_token %}
+        <input type="submit" value="Logout"/>
+      </form>
+        <h2>Add new receipt</h2>
+        <form action='add/' method="POST">
+          {% csrf_token %}
+			    Receipt name: <input type="text" name="content"/><br/>
+          Amount: <input type="number" name="amount"/><br/>
+            <input type="submit" value="Add"/>
+        </form>
+        <h2>Your receipts</h2>
+        <ul>
+          {% for receipt in receipts %}
+      
+          <li>
+            Receipt: {{receipt.content}}, Amount: {{receipt.amount}}
+            <form action='delete/' method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="id" value="{{receipt.id}}" />
+              <input type="submit" value="Delete"/>
+          </form>
+          </li>
+      
+          {% endfor %}
+          </ul>
+    </body>
+    
+</html>

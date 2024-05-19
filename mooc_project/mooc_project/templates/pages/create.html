@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <body>
+<h1>Create user</h1>
+<form method="post">
+  {% csrf_token %}
+  {{form}}
+  <button type="submit">Create user</button>
+    </form>
+</body>
+</html>
