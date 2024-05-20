@@ -6,14 +6,16 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 import sqlite3
+
 # A01:2021 – Broken Access Control
 # Fixed by adding @login_required below
-# @login_required(login_url='login/')
+# @login_required(login_url='login/') <- Fix, remove comment
 def userView(request, userId):
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
     # A03:2021 – Injection
     # SQL Injection is possible
+    # To fix, enable the userView below
     cursor.execute("SELECT * FROM mooc_project_receipt WHERE owner_id="+str(userId))  
     receipts = map(lambda x: {'id': x[0], 'owner': x[1], 'amount': x[2], 'content': x[3]}, cursor.fetchall())
     return render(request, 'pages/user.html', {'receipts': receipts})
@@ -70,13 +72,19 @@ def deleteReceiptView(request):
             pass
     return redirect('/')
 
-# A01:2021 – Broken Access Control
-# User id is set to the URL, 
-# which gives easy access to other user by manipulating url
+# A03:2021 – Injection
+# SQL Injection is possible
 @login_required(login_url='login/')
 def landingView(request):
     userId = request.user.id
     return redirect(f'user/{userId}')
+    
+# FIX 
+# @login_required(login_url='login/')
+# def landingView(request):
+#    return redirect('user/')
+
+
 
 def createUserView(request):
     if request.method == "POST":
