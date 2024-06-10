@@ -10,7 +10,7 @@ urlpatterns = [
     path('user/delete/', deleteReceiptView, name='delete'),
     # A03:2021 – Injection
     # SQL Injection is possible
-    path('user/<int:userId>', userView, name='user'), # FLAW -> Comment
+    path('user/<str:userId>', userView, name='user'), # FLAW -> Comment
     #  path('user/', userView, name='user'), # FIX -> Remove comment
     path('login/createUser/', createUserView, name='createUser'),
     path('', landingView, name='landing'),
